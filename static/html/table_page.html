@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BHAV COPY</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap Table -->
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/scroller/2.0.0/css/scroller.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/scroller/2.0.0/js/dataTables.scroller.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+
+
+
+</head>
+<body>
+    <body>
+	<div>
+        <div class="table-wrapper" >
+
+
+            <!-- Bootstrap Table Implementation -->
+
+            <table id="id_meters_data_table" class="display nowrap" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>SC_NAME</th>
+                        <th>OPEN</th>
+
+                        <th>CLOSE </th>
+                        <th>HIGH </th>
+						<th>LOW</th>
+						<th>LAST</th>
+						<th>PREVCLOSE</th>
+
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+	<div>
+              <input id="search-input" type="text" placeholder="Search on server..."  name="length" />
+			<button id="search-records">Search</button>
+	</div>
+  	</body>
+
+
+</body>
+</html>
+
+<script>
+
+	$(document).ready(function() {
+			table_draw()
+    });
+
+    function table_draw() {
+		$('#id_meters_data_table').DataTable().destroy();
+        $('#id_meters_data_table').DataTable( {
+            ajax: {
+        			url: "/search_records?name=default",
+        			dataSrc: "data",
+					type:"POST"
+    			},
+            deferRender:    true,
+            scrollY:        400,
+            scrollX: true,
+            "paging": true,
+            "pagingType": "full_numbers",
+            pageLength: 10,
+            columnDefs: [               ]
+        } );
+    }
+
+
+    $("#search-records").click(function(e) {
+			var search_name = $("#search-input").val().trim();
+			if(search_name.length >0 ) {
+                $.ajax({
+                    type: "GET",
+                    url: "/search_records?name=" + search_name
+                })
+                    .done(function (result) {
+                        console.log(result);
+
+						var data = result;
+                        if (data['data'].length > 0) {
+                            console.log("no records")
+							update_table_data(data['data']);
+                        }
+                        else{
+							alert("No records found.");
+						}
+                    });
+                $("#search-input").val('')
+            }
+            else{
+				alert("Please input name...");
+			}
+
+           e.preventDefault();
+         });
+
+	function update_table_data(row_data) {
+		$('#id_meters_data_table').DataTable().destroy();
+        $('#id_meters_data_table').DataTable( {
+            data:           row_data,
+            deferRender:    true,
+            scrollY:        400,
+            scrollX: true,
+            "paging": true,
+            "pagingType": "full_numbers",
+            pageLength: 10,
+            columnDefs: [ ]
+        } );
+    }
+
+</script>

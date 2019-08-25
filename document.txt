@@ -1,0 +1,9 @@
+- Install python(2.7)
+- use requirements.txt file for install require packages and command is "pip install -r requirements.txt"
+- open config.py file and set all require parameters value.
+- run command python app.py  for start CherryPy webserver.
+- use server_ip:port/home_page  use this format to open page.
+
+- To download bhav copy data based on require date use file download_bhav_data.py.
+- run command after update date on above file python download_bhav_data.py
+
