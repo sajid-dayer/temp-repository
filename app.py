@@ -44,18 +44,24 @@ class BseDataApp(object):
         return open("static/html/table_page.html").read()
 
 
-if __name__ == '__main__':
-    print os.getcwd()
-    print os.path.abspath(os.getcwd())
-    conf = {
-        '/': {
-            'tools.sessions.on': True,
-            'tools.staticdir.root': os.path.abspath(os.getcwd())
-        },
-        '/static': {
-            'tools.staticdir.on': True,
-            'tools.staticdir.dir': './static'
-        }
+print os.getcwd()
+print os.path.abspath(os.getcwd())
+conf = {
+    '/': {
+        'tools.sessions.on': True,
+        'tools.staticdir.root': os.path.abspath(os.getcwd())
+    },
+    '/static': {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': './static'
     }
-    cherrypy.config.update({'server.socket_port': app_running_port, 'server.socket_host': app_running_ip})
-    cherrypy.quickstart(BseDataApp(), '/', conf)
+}
+# cherrypy.config.update({'server.socket_port': app_running_port, 'server.socket_host': app_running_ip})
+# cherrypy.quickstart(BseDataApp(), '/', conf)
+
+cherrypy.config.update({'server.socket_port': app_running_port, 'server.socket_host': app_running_ip,'engine.autoreload.on': False})
+cherrypy.server.unsubscribe()
+cherrypy.engine.start()
+wsgiapp = cherrypy.tree.mount(BseDataApp(),'/', conf)
+# uwsgi --socket 0.0.0.0:64008 --protocol=http --wsgi-file app.py --callable wsgiapp
+# http://13.232.47.5:64008/home_page
