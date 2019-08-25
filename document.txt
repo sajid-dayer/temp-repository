@@ -7,3 +7,5 @@
 - To download bhav copy data based on require date use file download_bhav_data.py.
 - run command after update date on above file python download_bhav_data.py
 
+- git repo https://github.com/sajid-dayer/temp-repository.git
+

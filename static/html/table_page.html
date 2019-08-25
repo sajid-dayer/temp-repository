@@ -54,7 +54,7 @@
     </div>
 
 	<div>
-              <input id="search-input" type="text" placeholder="Search on server..."  name="length" />
+              <input id="search-input" type="text" placeholder="Search server data ..."  name="length" />
 			<button id="search-records">Search</button>
 	</div>
   	</body>
@@ -82,6 +82,9 @@
             scrollX: true,
             "paging": true,
             "pagingType": "full_numbers",
+			language: {
+				searchPlaceholder: "Search local data ..."
+			},
             pageLength: 10,
             columnDefs: [               ]
         } );

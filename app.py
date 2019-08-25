@@ -30,6 +30,7 @@ class BseDataApp(object):
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def search_records(self, name="DEFAULT"):
+        remote_ip = cherrypy.request.remote.ip
         name = name.upper()
         response = {"data": []}
         if str(name) == "DEFAULT":
@@ -39,7 +40,7 @@ class BseDataApp(object):
         return response
 
     @cherrypy.expose
-    def home_page(self):
+    def home(self):
         return open("static/html/table_page.html").read()
 
 
