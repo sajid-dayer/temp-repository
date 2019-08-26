@@ -44,8 +44,6 @@ class BseDataApp(object):
         return open("static/html/table_page.html").read()
 
 
-print os.getcwd()
-print os.path.abspath(os.getcwd())
 conf = {
     '/': {
         'tools.sessions.on': True,
