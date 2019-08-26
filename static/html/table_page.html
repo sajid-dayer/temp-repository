@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+<link href="/static/css/styles.css" rel="stylesheet">
 <!-- Bootstrap Table -->
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/scroller/2.0.0/css/scroller.dataTables.min.css" rel="stylesheet">
@@ -25,48 +25,64 @@
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
 
 
-
 </head>
 <body>
-    <body>
-	<div>
-        <div class="table-wrapper" style="padding-top: 30px" >
+    <div class="container-fluid">
+
+		<!-- Loading -->
+
+		<div class="spinner white_content" id="id_loading_ani" style="display: none">
+		 <div class="bounce1"></div>
+		 <div class="bounce2"></div>
+		 <div class="bounce3"></div>
+		</div>
+		<div id="id_fade_load" class="black_overlay"></div>
 
 
-            <!-- Bootstrap Table Implementation -->
+		<div style="margin: 10px;">
+			<button type="button" class="btn btn-default btn-sm" onclick="table_draw()">
+			  <span class="glyphicon glyphicon-refresh"></span> Refresh
+			</button>
+		</div>
 
-            <table id="id_meters_data_table" class="display nowrap" style="width:100%;">
-                <thead>
-                    <tr>
-                        <th>SC_NAME</th>
-                        <th>OPEN</th>
+		<div style="padding-top: 30px" >
 
-                        <th>CLOSE </th>
-                        <th>HIGH </th>
+
+			<!-- Bootstrap Table Implementation -->
+
+			<table id="id_meters_data_table" class="display nowrap" style="width:100%;">
+				<thead>
+					<tr>
+						<th>SC_NAME</th>
+						<th>OPEN</th>
+
+						<th>CLOSE </th>
+						<th>HIGH </th>
 						<th>LOW</th>
 						<th>LAST</th>
 						<th>PREVCLOSE</th>
 
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
+					</tr>
+				</thead>
+			</table>
+		</div>
 
-	<div class="row" style="margin-top: 30px;">
-		<div class="col-md-4"></div>
-		<div class="col-md-4">
-			<input id="search-input" class="form-control" type="text" placeholder="Search on server ..."  name="length" />
+
+		<div class="row" style="margin-top: 30px;">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<input id="search-input" class="form-control" type="text" placeholder="Search on server ..."  name="length" />
+
+			</div>
+			<div class="col-md-1" style="text-align: left;">
+				<button id="search-records" class="form-control">Search</button>
+
+			</div>
+			<div class="col-md-3"></div>
 
 		</div>
-		<div class="col-md-1" style="text-align: left;">
-			<button id="search-records" class="form-control">Search</button>
-
-		</div>
-		<div class="col-md-3"></div>
-
 	</div>
-  	</body>
+
 
 
 </body>
@@ -84,7 +100,17 @@
             ajax: {
         			url: "/search_records?name=default",
         			dataSrc: "data",
-					type:"POST"
+					type:"POST",
+					beforeSend: function() {
+						 document.getElementById('id_loading_ani').style.display='block';
+						 document.getElementById('id_fade_load').style.display='block';
+
+					},
+					complete: function(){
+                        document.getElementById('id_loading_ani').style.display='none';
+						document.getElementById('id_fade_load').style.display='none';
+
+      				 },
     			},
             deferRender:    true,
             scrollY:        400,
@@ -105,9 +131,19 @@
 			if(search_name.length >0 ) {
                 $.ajax({
                     type: "GET",
-                    url: "/search_records?name=" + search_name
-                })
-                    .done(function (result) {
+                    url: "/search_records?name=" + search_name,
+					beforeSend: function() {
+						 document.getElementById('id_loading_ani').style.display='block';
+						 document.getElementById('id_fade_load').style.display='block';
+
+					},
+					complete: function(){
+                        document.getElementById('id_loading_ani').style.display='none';
+						document.getElementById('id_fade_load').style.display='none';
+
+      				 },
+
+                }).done(function (result) {
                         console.log(result);
 
 						var data = result;
@@ -116,13 +152,13 @@
 							update_table_data(data['data']);
                         }
                         else{
-							alert("No records found.");
+							alert("No records found");
 						}
                     });
                 $("#search-input").val('')
             }
             else{
-				alert("Please input name...");
+				alert("Invalid input");
 			}
 
            e.preventDefault();
