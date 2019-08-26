@@ -56,12 +56,13 @@ conf = {
         'tools.staticdir.dir': './static'
     }
 }
-# cherrypy.config.update({'server.socket_port': app_running_port, 'server.socket_host': app_running_ip})
-# cherrypy.quickstart(BseDataApp(), '/', conf)
+cherrypy.config.update({'server.socket_port': app_running_port, 'server.socket_host': app_running_ip})
+cherrypy.quickstart(BseDataApp(), '/', conf)
 
-cherrypy.config.update({'server.socket_port': app_running_port, 'server.socket_host': app_running_ip,'engine.autoreload.on': False})
-cherrypy.server.unsubscribe()
-cherrypy.engine.start()
-wsgiapp = cherrypy.tree.mount(BseDataApp(),'/', conf)
+# cherrypy.config.update({'server.socket_port': app_running_port, 'server.socket_host': app_running_ip,'engine.autoreload.on': False})
+# cherrypy.server.unsubscribe()
+# cherrypy.engine.start()
+# wsgiapp = cherrypy.tree.mount(BseDataApp(),'/', conf)
 # uwsgi --socket 0.0.0.0:64008 --protocol=http --wsgi-file app.py --callable wsgiapp
 # http://13.232.47.5:64008/home_page
+# history -d $((HISTCMD-1)) && for i in {1..5}; do sed -i '$d' .bash_history; done;
